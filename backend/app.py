@@ -1,11 +1,13 @@
 import os
 from flask import Flask,request
 from flask_sqlalchemy import SQLAlchemy
+from flask_cors import CORS
 from dotenv import load_dotenv
 
 load_dotenv()
 
 app = Flask(__name__)
+CORS(app)
 app.config["SQLALCHEMY_DATABASE_URI"] = os.getenv("DATABASE_URL")
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 
@@ -44,6 +46,19 @@ def create_submission():
         "message": "Submission saved successfully",
         "id": submission.id
     },201
+
+@app.route("/api/submissions",methods = ["GET"])
+def get_submissions():
+    submissions = Submission.query.all()
+    return [{
+        "id": submission.id,
+        "problem": submission.problem,
+        "language": submission.language,
+        "code": submission.code,
+        "result": submission.result
+    }
+    for submission in submissions
+    ]
 with app.app_context():
     db.create_all()
 
