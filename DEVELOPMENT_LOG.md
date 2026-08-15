@@ -133,3 +133,79 @@ submissions table
 * Create `GET /api/submissions`
 * Connect the React frontend to the submission API
 * Display stored submissions in the CodeMind frontend
+
+
+## Day 3 — React Submission Integration
+
+### 🎯 Goal
+
+Connect the React frontend to the Flask submission APIs and create a complete frontend-backend-database flow.
+
+### 🛠️ Built
+
+- Created a React submission form
+- Added React state using `useState`
+- Added form submission handling using `onSubmit`
+- Connected React to the Flask POST `/api/submissions` endpoint
+- Sent submission data as JSON using `fetch()`
+- Added CORS support to Flask
+- Connected React to the GET `/api/submissions` endpoint
+- Retrieved stored submissions from PostgreSQL
+- Displayed submission history in the React frontend
+- Refreshed submission history after creating a new submission
+
+### 🧠 What I Learned
+
+- How React state stores form values
+- How `onChange` updates React state
+- How `onSubmit` triggers a form submission handler
+- How `async` and `await` work with API requests
+- How `fetch()` sends HTTP requests
+- Difference between GET and POST
+- How JSON travels between React and Flask
+- `JSON.stringify()` for converting JavaScript objects to JSON
+- `response.json()` for reading JSON responses
+- How Flask receives JSON using `request.get_json()`
+- How React receives and displays API responses
+- How `.map()` is used to display a list of submissions
+- How frontend and backend communicate with CORS
+
+### 🏗️ Current Architecture
+
+React Frontend
+      ↓
+HTTP Request
+      ↓
+Flask API
+      ↓
+SQLAlchemy
+      ↓
+PostgreSQL
+      ↓
+JSON Response
+      ↓
+React Frontend
+      ↓
+Submission History
+
+### 🐛 Challenges
+
+- Encountered a `405 Method Not Allowed` error while connecting the React POST request.
+- Identified that the POST route URL and HTTP method needed to match the React request.
+- Learned that GET and POST can use the same URL because the HTTP method distinguishes the operation.
+- Fixed the placement and naming of the `fetchSubmissions()` function in React.
+
+### 📌 Current Status
+
+✅ React submission form working  
+✅ POST submission API working  
+✅ PostgreSQL storing submissions  
+✅ GET submissions API working  
+✅ Submission history displayed in React  
+✅ React ↔ Flask ↔ PostgreSQL flow working
+
+### 🔜 Next
+
+- Add DELETE submission functionality
+- Introduce the DELETE HTTP method
+- Complete the basic CRUD foundation
