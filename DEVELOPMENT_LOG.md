@@ -209,3 +209,112 @@ Submission History
 - Add DELETE submission functionality
 - Introduce the DELETE HTTP method
 - Complete the basic CRUD foundation
+
+
+
+## Day 4 — Submission Management & Timestamps
+
+### 🎯 Goal
+
+Improve the CodeMind submission system by adding submission deletion and timestamps, making the submission history more useful and closer to a real-world application.
+
+### 🛠️ Built
+
+- Added `DELETE /api/submissions/<id>` API endpoint
+- Added submission deletion using SQLAlchemy
+- Added Delete button to the React submission history
+- Connected React to the DELETE API
+- Refreshed submission history after deleting a submission
+- Added `created_at` field to the `Submission` database model
+- Automatically recorded the submission creation time
+- Converted Python datetime values to ISO format before sending them as JSON
+- Converted the timestamp into a JavaScript `Date` object in React
+- Displayed the timestamp using `toLocaleString()`
+
+### 🧠 What I Learned
+
+- What the DELETE HTTP method is used for
+- How URL parameters work using `/api/submissions/<id>`
+- How Flask captures an ID using `<int:id>`
+- How `Submission.query.get()` retrieves a database record
+- How `db.session.delete()` removes a record
+- How React sends DELETE requests using `fetch()`
+- How to refresh React state after deleting data
+- Why database records need timestamps
+- What a Python `datetime` object is
+- Why Python datetime values need to be converted before being returned as JSON
+- How `.isoformat()` converts a Python datetime into a standard string representation
+- How `new Date()` converts the timestamp string into a JavaScript Date object
+- How `.toLocaleString()` formats the date for display
+- Why timezone information is important when working with timestamps
+
+### 🔄 Date/Time Data Flow
+
+```text
+PostgreSQL
+     ↓
+Python datetime
+     ↓
+.isoformat()
+     ↓
+ISO timestamp string
+     ↓
+JSON response
+     ↓
+React
+     ↓
+new Date()
+     ↓
+JavaScript Date object
+     ↓
+.toLocaleString()
+     ↓
+Human-readable date/time
+
+🏗️ Current Architecture
+React Frontend
+      ↓
+HTTP Request
+      ↓
+Flask API
+      ↓
+SQLAlchemy
+      ↓
+PostgreSQL
+      ↓
+JSON Response
+      ↓
+React Frontend
+      ↓
+Submission History
+
+🐛 Challenges
+Initially encountered confusion about why the same submissions endpoint can use different HTTP methods.
+Learned that the URL and HTTP method together determine the API operation.
+Encountered a 405 Method Not Allowed error while connecting the React POST request.
+Fixed the mismatch between the React request and Flask route.
+Encountered timezone differences while displaying submission timestamps.
+Learned that UTC and local time must be handled carefully when transferring timestamps between the backend and frontend.
+Learned how to debug API and database-related issues during development.
+
+📌 Current Status
+
+✅ React submission form working
+✅ Flask backend working
+✅ PostgreSQL connected
+✅ SQLAlchemy working
+✅ POST submission API working
+✅ GET submissions API working
+✅ DELETE submission API working
+✅ Submission history displayed in React
+✅ Delete functionality working
+✅ Submission timestamps stored
+✅ Submission timestamps displayed in React
+✅ React ↔ Flask ↔ PostgreSQL flow working
+
+🔜 Next
+Improve the submission interface
+Add submission details
+Add better submission status handling
+Begin building CodeMind's code analysis functionality
+Start moving from basic CRUD functionality toward CodeMind's core AI-focused features

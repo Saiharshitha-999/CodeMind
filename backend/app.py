@@ -3,6 +3,7 @@ from flask import Flask,request
 from flask_sqlalchemy import SQLAlchemy
 from flask_cors import CORS
 from dotenv import load_dotenv
+from datetime import datetime,timezone
 
 load_dotenv()
 
@@ -19,6 +20,7 @@ class Submission(db.Model):
     language = db.Column(db.String(50), nullable=False)
     code = db.Column(db.Text, nullable=False)
     result = db.Column(db.String(50), nullable=False)
+    created_at = db.Column(db.DateTime, default=lambda: datetime.now(timezone.utc))
 
 @app.route("/")
 def home():
@@ -55,10 +57,28 @@ def get_submissions():
         "problem": submission.problem,
         "language": submission.language,
         "code": submission.code,
-        "result": submission.result
+        "result": submission.result,
+        "created_at": submission.created_at.isoformat()
     }
     for submission in submissions
     ]
+
+@app.route("/api/submissions/<int:id>", methods=["DELETE"])
+def delete_submission(id):
+    submission = Submission.query.get(id)
+
+    if submission is None:
+        return {
+            "message": "Submission not found"
+        }, 404
+
+    db.session.delete(submission)
+    db.session.commit()
+
+    return {
+        "message": "Submission deleted successfully"
+    }, 200
+
 with app.app_context():
     db.create_all()
 

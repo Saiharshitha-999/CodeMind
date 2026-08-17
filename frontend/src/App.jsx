@@ -36,6 +36,27 @@ function App() {
     fetchSubmissions();
   }, []);
 
+  const deleteSubmission = async (id) => {
+  try {
+    const response = await fetch(
+      `http://127.0.0.1:5000/api/submissions/${id}`,
+      {
+        method: "DELETE",
+      }
+    );
+
+    const data = await response.json();
+
+    console.log(data);
+
+    if (response.ok) {
+      fetchSubmissions();
+    }
+  } catch (error) {
+    console.error("Error:", error);
+  }
+};
+
   const handleSubmit = async (event) => {
     event.preventDefault();
 
@@ -129,6 +150,12 @@ function App() {
           <p>Language: {submission.language}</p>
           <p>Result: {submission.result}</p>
           <pre>{submission.code}</pre>
+          <p>
+            Submitted: {new Date(submission.created_at).toLocaleString()}
+          </p>
+          <button onClick = {() => deleteSubmission(submission.id)}>
+            Delete
+          </button>
         </div>
       ))}
     </div>
