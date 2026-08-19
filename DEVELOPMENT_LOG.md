@@ -318,3 +318,112 @@ Add submission details
 Add better submission status handling
 Begin building CodeMind's code analysis functionality
 Start moving from basic CRUD functionality toward CodeMind's core AI-focused features
+
+
+## Day 5 — Code Intelligence Foundation
+
+### 🎯 Goal
+
+Start building the actual intelligence layer of CodeMind by creating a code analysis pipeline that can understand the structure of submitted code.
+
+### 🛠️ Built
+
+- Created the `backend/analyzer/` module
+- Created:
+  - `parser.py`
+  - `features.py`
+  - `complexity.py`
+  - `analyzer.py`
+- Created the `/api/analyze` POST endpoint
+- Connected Flask to the analyzer module
+- Implemented Python source-code parsing using Python's built-in `ast` module
+- Generated an Abstract Syntax Tree (AST) from submitted Python code
+- Implemented AST traversal using recursive node visiting
+- Implemented basic feature extraction from the AST
+- Added detection for:
+  - Number of loops
+  - Number of conditionals
+  - Number of functions
+  - Maximum loop depth
+  - Recursion
+- Connected the parser → AST → feature extraction → Flask API pipeline
+- Tested the `/api/analyze` endpoint successfully using PowerShell
+
+### 🧠 What I Learned
+
+- What a parser does
+- What an Abstract Syntax Tree (AST) is
+- How a parser converts source code into an AST
+- How AST nodes represent program structures
+- How to traverse an AST recursively
+- How `isinstance()` identifies different AST node types
+- How `ast.iter_child_nodes()` moves through the AST
+- How to detect loops and conditionals from AST nodes
+- How loop depth can be calculated from nested AST nodes
+- How recursion can be detected by comparing a function's name with function calls inside it
+- How a parser, feature extractor and analyzer can be separated into different modules
+
+### 🏗️ Current Architecture
+
+```text
+React / API Client
+       ↓
+POST /api/analyze
+       ↓
+Flask
+       ↓
+analyzer.py
+       ↓
+parser.py
+       ↓
+Python AST
+       ↓
+features.py
+       ↓
+Feature Extraction
+       ↓
+JSON Response
+
+📊 Current Analysis Output
+
+The analyzer can currently produce information such as:
+
+{
+  "language": "Python",
+  "features": {
+    "loops": 1,
+    "conditionals": 1,
+    "functions": 0,
+    "max_loop_depth": 1,
+    "recursion": false
+  }
+}
+
+🐛 Challenges
+Initially confused about the relationship between a parser and an AST.
+Learned that the parser creates the AST, while the analyzer uses the AST to extract useful information.
+Initially found recursive AST traversal and ast.iter_child_nodes() difficult to understand.
+Understood how visit() recursively walks through the AST.
+Designed the analysis layer with future multi-language support in mind instead of making the system Python-only.
+📌 Current Status
+
+✅ Analyzer module created
+✅ /api/analyze API created
+✅ Python AST parsing working
+✅ AST feature extraction working
+✅ Loop detection working
+✅ Conditional detection working
+✅ Function detection working
+✅ Loop-depth detection working
+✅ Recursion detection implemented
+✅ Flask → Analyzer → AST → Features pipeline working
+✅ API tested successfully
+
+🔜 Next
+Improve the AST feature extraction
+Build the complexity analysis engine
+Detect time and space complexity
+Detect algorithmic patterns
+Design the multi-language parser architecture
+Connect the analysis results to the React frontend
+Later integrate ML/Transformer-based code understanding

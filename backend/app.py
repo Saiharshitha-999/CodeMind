@@ -4,6 +4,7 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_cors import CORS
 from dotenv import load_dotenv
 from datetime import datetime,timezone
+from analyzer.analyzer import analyze_code
 
 load_dotenv()
 
@@ -78,6 +79,17 @@ def delete_submission(id):
     return {
         "message": "Submission deleted successfully"
     }, 200
+
+@app.route("/api/analyze",methods = ["POST"])
+def analyze():
+    data = request.get_json()
+
+    code = data["code"]
+    language = data["language"]
+
+    result = analyze_code(code, language)
+
+    return result, 200
 
 with app.app_context():
     db.create_all()
