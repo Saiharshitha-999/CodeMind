@@ -427,3 +427,156 @@ Detect algorithmic patterns
 Design the multi-language parser architecture
 Connect the analysis results to the React frontend
 Later integrate ML/Transformer-based code understanding
+
+---
+
+## Day 6 — Complexity Analysis & Frontend Integration
+
+### 🎯 Goal
+
+Connect CodeMind's code analysis engine to the React frontend and generate initial time and space complexity insights from the extracted code features.
+
+### 🛠️ Built
+
+* Created the initial complexity analysis engine
+* Implemented time complexity estimation based on maximum loop depth
+* Implemented initial space complexity estimation using recursion information
+* Connected `complexity.py` to the main analyzer
+* Updated `/api/analyze` to return both code features and complexity information
+* Tested complexity analysis using simple and nested-loop Python programs
+* Connected the React frontend to the `/api/analyze` endpoint
+* Added `analysis` state to the React application
+* Added an `Analyze Code` action
+* Sent the selected language and code from React to Flask
+* Received analysis results from Flask and stored them in React state
+* Displayed code analysis results in the frontend
+* Displayed:
+  * Time complexity
+  * Space complexity
+  * Number of loops
+  * Number of conditionals
+  * Number of functions
+  * Maximum loop depth
+  * Recursion detection
+* Integrated the analysis results into the CodeMind frontend dashboard
+* Kept submission, deletion, timestamp, and submission-history functionality working alongside the new analysis feature
+
+### 🧠 What I Learned
+
+* How a complexity analyzer can use extracted AST features
+* How loop depth can be used as an initial heuristic for estimating time complexity
+* How recursion can affect space complexity
+* How one Flask API can combine results from multiple backend modules
+* How React sends code to a Flask analysis endpoint
+* How `useState` stores API analysis results
+* How `fetch()` sends a POST request from React to Flask
+* How `response.json()` converts the API response into a JavaScript object
+* How `setAnalysis()` updates React state
+* How conditional rendering can display analysis results only after analysis is completed
+* How the frontend acts as a visualization layer for backend intelligence
+
+### 🏗️ Current Architecture
+
+```text
+React Frontend
+      ↓
+Analyze Code
+      ↓
+POST /api/analyze
+      ↓
+Flask
+      ↓
+analyzer.py
+      ↓
+parser.py
+      ↓
+Python AST
+      ↓
+features.py
+      ↓
+Feature Extraction
+      ↓
+complexity.py
+      ↓
+Complexity Analysis
+      ↓
+JSON Response
+      ↓
+React State
+      ↓
+Code Analysis Dashboard
+
+📊 Current Analysis Output
+
+Example:
+
+{
+  "language": "Python",
+  "features": {
+    "loops": 2,
+    "conditionals": 0,
+    "functions": 0,
+    "max_loop_depth": 2,
+    "recursion": false
+  },
+  "complexity": {
+    "time": "O(n^2)",
+    "space": "O(1)"
+  }
+}
+
+🐛 Challenges
+Initially found it difficult to understand how the AST feature extractor works.
+Learned how the visit() function recursively traverses the AST.
+Initially confused about how loop depth is calculated.
+Understood how nested loops increase the loop depth.
+Initially made mistakes while connecting the React analysis function to the Flask API.
+Fixed issues with the response.json() call and React analysis state.
+Learned that the current complexity engine is a heuristic and cannot accurately determine the complexity of every possible program.
+Learned that frontend code can be used as a visualization layer while the main intelligence remains in the backend.
+
+
+📌 Current Status
+✅ Python AST parser working
+✅ Feature extraction working
+✅ Loop detection working
+✅ Conditional detection working
+✅ Function detection working
+✅ Loop-depth detection working
+✅ Recursion detection working
+✅ Complexity analyzer connected
+✅ Time complexity estimation working
+✅ Space complexity estimation working
+✅ /api/analyze working
+✅ React connected to analysis API
+✅ Analysis results displayed in React
+✅ Submission history working
+✅ Delete functionality working
+✅ Submission timestamps working
+✅ React ↔ Flask ↔ PostgreSQL ↔ Analyzer flow working
+⚠️ Current Limitation
+
+The current complexity engine is a basic heuristic based mainly on loop depth and recursion.
+
+For example, it does not yet understand:
+
+Actual loop bounds
+Different loop ranges
+Sequential loops
+Logarithmic loops
+Data structure operations
+Recursive recurrence relations
+Algorithm-specific complexity patterns
+
+Therefore, the current complexity result is an initial version and will be improved in future development.
+
+🔜 Next
+Improve the complexity analysis engine
+Analyze actual loop bounds instead of only loop depth
+Detect common algorithmic patterns
+Improve space complexity analysis
+Add multi-language parsing support
+Improve code explanation
+Build more intelligent code-quality insights
+Continue improving the React analysis dashboard
+Begin integrating ML/DL-based code understanding into CodeMind
