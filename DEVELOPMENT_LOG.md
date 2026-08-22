@@ -319,6 +319,7 @@ Add better submission status handling
 Begin building CodeMind's code analysis functionality
 Start moving from basic CRUD functionality toward CodeMind's core AI-focused features
 
+---
 
 ## Day 5 — Code Intelligence Foundation
 
@@ -580,3 +581,150 @@ Improve code explanation
 Build more intelligent code-quality insights
 Continue improving the React analysis dashboard
 Begin integrating ML/DL-based code understanding into CodeMind
+
+---
+
+##🧠 CodeMind — Day 7 Development Log
+###🎯 Goal
+
+Improve CodeMind's complexity-analysis foundation by making the AST analyzer understand loop bounds instead of relying only on maximum loop depth.
+
+🛠️ Worked On
+Extended the AST feature extractor with loop_details.
+Learned how ast.For represents a for loop.
+Learned how node.iter represents what a loop iterates over.
+Learned how ast.Call represents function calls.
+Learned how node.func represents the function being called.
+Learned how ast.Name represents identifiers such as n, i, and range.
+Detected range()-based loops.
+Extracted the argument from range(...) using node.iter.args.
+Added support for:
+range(n)
+range(10)
+range(n * n)
+range(n + 1)
+range(n - 1)
+range(n / 2) conceptually for asymptotic analysis
+Used ast.Constant to extract constant values.
+Used ast.BinOp to inspect expressions such as n * n.
+Used range_arg.left and range_arg.right to inspect binary-operation operands.
+Identified n * n as n².
+Started adding loop depth to loop_details.
+🧠 Important Concepts Learned
+
+AST traversal:
+
+Current Node
+     ↓
+ast.iter_child_nodes(node)
+     ↓
+Child Nodes
+     ↓
+visit(child)
+
+Function-call structure:
+
+      factorial(n - 1)
+            ↓
+      ast.Call
+            ↓
+      node.func
+            ↓
+      factorial
+            ↓
+      node.func.id
+            ↓
+      "factorial"
+
+Loop structure:
+
+      for i in range(n)
+            ↓
+      ast.For
+            ↓
+      node.iter
+            ↓
+      ast.Call
+            ↓
+      range
+      🔥 Important Design Insight
+
+We identified a major limitation of using only loop count/depth.
+
+These two programs are different:
+
+      for i in range(n):
+      print(i)
+
+      for j in range(n):
+      print(j)
+
+The loops are sequential:
+
+   O(n) + O(n) = O(n)
+
+Whereas:
+
+for i in range(n):
+    for j in range(n):
+        print(i, j)
+
+contains nested loops:
+
+O(n) × O(n) = O(n²)
+
+Therefore CodeMind must understand the relationship between loops, not simply count them.
+
+### 📌 Current Complexity Engine
+
+Current complexity.py still uses:
+
+max_loop_depth
++
+recursion
+
+to produce a basic heuristic.
+
+We deliberately did not replace it today.
+
+The new loop information is being prepared so that the next complexity engine can reason about actual loop bounds and nesting.
+
+###🏗️ Day 7 Architecture Progress
+Source Code
+     ↓
+Python AST
+     ↓
+AST Traversal
+     ↓
+Loop Detection
+     ↓
+Loop Details
+     ├── type
+     ├── iterator
+     ├── bound
+     └── depth
+     ↓
+Future Complexity Engine V2
+
+
+### ⚠️ Current Limitations
+Complexity calculation is still heuristic.
+Loop bounds are not yet fully generalized.
+Sequential vs nested loop complexity has not yet been implemented.
+while loop growth is not yet analyzed.
+Complex mathematical expressions are not yet fully interpreted.
+Multi-language parsing is not implemented yet.
+
+
+### 🔜 Next — Day 8
+Loop Details
+     ↓
+Identify loop relationships
+     ↓
+Sequential vs nested loops
+     ↓
+Combine complexities
+     ↓
+Complexity Engine V2
+     ↓
+Test with real DSA solutions
